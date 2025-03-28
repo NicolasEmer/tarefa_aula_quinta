@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarefas</title>
+</head>
+<body>
+<h1>TAREFAS</h1>
+<ul id="tarefas-lista"></ul>
+
+<script>
+    function carregarTarefas() {
+        fetch('/tarefas/v1')
+            .then(response => response.json())
+            .then(tarefas => {
+                const listaTarefas = document.getElementById('tarefas-lista');
+                listaTarefas.innerHTML = '';
+
+                tarefas.forEach(tarefa => {
+                    const li = document.createElement('li');
+
+                    li.innerHTML = `
+                            <strong>ID:</strong> ${tarefa.id} <br>
+                            <strong>Descrição:</strong> ${tarefa.descricao} <br>
+                            <strong>Data de Criação:</strong> ${new Date(tarefa.dataCriacao).toLocaleString()} <br>
+                            <strong>Data Prevista:</strong> ${new Date(tarefa.dataPrevista).toLocaleString()} <br>
+                            <strong>Data de Encerramento:</strong> ${new Date(tarefa.dataEncerramento).toLocaleString()} <br>
+                            <strong>Situação:</strong> ${tarefa.situacao}
+                        `;
+
+                    listaTarefas.appendChild(li);
+                });
+            })
+            .catch(error => {
+                console.error('Erro ao carregar as tarefas:', error);
+            });
+    }
+
+    window.onload = carregarTarefas;
+</script>
+</body>
+</html>
