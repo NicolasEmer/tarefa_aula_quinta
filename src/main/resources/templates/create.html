@@ -1,0 +1,67 @@
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Criar Tarefa</title>
+  <style> body { font-family: Arial, sans-serif; margin: 20px; } form div { margin-bottom: 10px; } </style>
+</head>
+<body>
+<h1>Nova Tarefa</h1>
+<form id="form-tarefa">
+  <div>
+    <label>Descrição:<br>
+      <input name="descricao" required>
+    </label>
+  </div>
+  <div>
+    <label>Data Prevista:<br>
+      <input type="datetime-local" name="dataPrevista">
+    </label>
+  </div>
+  <div>
+    <label>Data Encerramento:<br>
+      <input type="datetime-local" name="dataEncerramento">
+    </label>
+  </div>
+  <div>
+    <label>Situação:<br>
+      <select name="situacao" required>
+        <option value="">Selecione</option>
+        <option value="concluida">Concluído</option>
+        <option value="em_andamento">Em andamento</option>
+        <option value="pendente">Pendente</option>
+      </select>
+    </label>
+  </div>
+  <button type="submit">Salvar</button>
+  <button type="button" onclick="location.href='/'">Cancelar</button>
+</form>
+
+<script>
+  ;(function(){
+    const orig = Date.prototype.toLocaleString;
+    Date.prototype.toLocaleString = function(locale, options){
+      locale  = locale  || 'pt-BR';
+      options = Object.assign({ timeZone: 'America/Sao_Paulo' }, options || {});
+      return orig.call(this, locale, options);
+    };
+  })();
+  document.getElementById('form-tarefa').addEventListener('submit', async e => {
+    e.preventDefault();
+    const form = e.target;
+    const dto = {
+      descricao: form.descricao.value,
+      dataPrevista: form.dataPrevista.value || null,
+      dataEncerramento: form.dataEncerramento.value || null,
+      situacao: form.situacao.value
+    };
+    await fetch('/tarefas/v1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dto)
+    });
+    location.href = '/';
+  });
+</script>
+</body>
+</html>

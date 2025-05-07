@@ -1,9 +1,6 @@
 package com.example.tarefa.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -17,6 +14,7 @@ import java.time.LocalDateTime;
 public class Tarefa {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "descricao", length = 100)
     private String descricao;
@@ -28,6 +26,5 @@ public class Tarefa {
     private LocalDateTime dataEncerramento;
     @Column(name = "situacao", length = 20)
     private String situacao;
-
 
 }

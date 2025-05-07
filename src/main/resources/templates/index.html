@@ -1,43 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tarefas</title>
+    <title>Gestão de Tarefas</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        button { margin: 5px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background: #f0f0f0; }
+        form#filtro-tarefas > * { margin-right: 10px; }
+    </style>
 </head>
 <body>
-<h1>TAREFAS</h1>
-<ul id="tarefas-lista"></ul>
+<h1>MINHAS TAREFAS</h1>
 
-<script>
-    function carregarTarefas() {
-        fetch('/tarefas/v1')
-            .then(response => response.json())
-            .then(tarefas => {
-                const listaTarefas = document.getElementById('tarefas-lista');
-                listaTarefas.innerHTML = '';
+<form id="filtro-tarefas" th:action="@{/}" method="get">
+    <label>De:
+        <input type="date" name="dataInicial"
+               th:value="${dataInicial}" />
+    </label>
+    <label>Até:
+        <input type="date" name="dataFinal"
+               th:value="${dataFinal}" />
+    </label>
+    <label>Situação:
+        <select name="situacao">
+            <option value=""
+                    th:selected="${situacao} == null">Todas</option>
+            <option value="concluida"
+                    th:selected="${situacao} == 'concluida'">Concluída</option>
+            <option value="em_andamento"
+                    th:selected="${situacao} == 'em_andamento'">Em andamento</option>
+            <option value="pendente"
+                    th:selected="${situacao} == 'pendente'">Pendente</option>
+        </select>
+    </label>
+    <button type="submit">Filtrar</button>
+    <button type="button"
+            onclick="location.href='/tarefas/v1/pdf?'+ new URLSearchParams({dataInicial:dataInicial?.value,dataFinal:dataFinal?.value,situacao:situacao?.value}).toString()">
+        Exportar PDF
+    </button>
+</form>
 
-                tarefas.forEach(tarefa => {
-                    const li = document.createElement('li');
+<button onclick="location.href='/create'">➕ Nova Tarefa</button>
 
-                    li.innerHTML = `
-                            <strong>ID:</strong> ${tarefa.id} <br>
-                            <strong>Descrição:</strong> ${tarefa.descricao} <br>
-                            <strong>Data de Criação:</strong> ${new Date(tarefa.dataCriacao).toLocaleString()} <br>
-                            <strong>Data Prevista:</strong> ${new Date(tarefa.dataPrevista).toLocaleString()} <br>
-                            <strong>Data de Encerramento:</strong> ${new Date(tarefa.dataEncerramento).toLocaleString()} <br>
-                            <strong>Situação:</strong> ${tarefa.situacao}
-                        `;
-
-                    listaTarefas.appendChild(li);
-                });
-            })
-            .catch(error => {
-                console.error('Erro ao carregar as tarefas:', error);
-            });
-    }
-
-    window.onload = carregarTarefas;
-</script>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Criada em</th>
+        <th>Descrição</th>
+        <th>Prevista</th>
+        <th>Encerramento</th>
+        <th>Situação</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="t : ${tarefas}">
+        <td th:text="${t.id}"/>
+        <td th:text="${#temporals.format(t.dataCriacao,'dd/MM/yyyy HH:mm')}"/>
+        <td th:text="${t.descricao}"/>
+        <td th:text="${t.dataPrevista != null
+                      ? #temporals.format(t.dataPrevista,'dd/MM/yyyy HH:mm')
+                      : '-'}"/>
+        <td th:text="${t.dataEncerramento != null
+                      ? #temporals.format(t.dataEncerramento,'dd/MM/yyyy HH:mm')
+                      : '-'}"/>
+        <td>
+            <button th:onclick="|location.href='/edit?id=${t.id}'|">
+                ✏️ Editar
+            </button>
+            <button th:onclick="|deleteTask(${t.id})|">
+                🗑️ Excluir
+            </button>
+        </td>
+    </tr>
+    </tbody>
+    <script>
+        function deleteTask(id) {
+            fetch('/tarefas/v1/' + id, { method: 'DELETE' })
+                .then(() => location.reload());
+        }
+    </script>
+</table>
 </body>
 </html>
