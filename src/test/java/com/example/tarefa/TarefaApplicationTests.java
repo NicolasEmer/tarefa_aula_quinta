@@ -418,7 +418,7 @@ class TarefaApplicationTests {
     }
 
     @Test
-    @DisplayName("Should return 404 when calling wrong URL")
+    @DisplayName("Should return 400 when calling wrong URL")
     public void wrongUrl_ReturnsNotFound() {
         testClient
                 .get()
