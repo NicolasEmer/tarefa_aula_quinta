@@ -51,7 +51,7 @@ class LoginMvcTests {
     }
 
     @Test
-    @DisplayName("Login com credenciais válidas deve redirecionar para '/'")
+    @DisplayName("Login with valid credentials should redirect to '/'")
     void loginComSucesso_DeveRedirecionarParaHome() throws Exception {
         mockMvc.perform(
                         SecurityMockMvcRequestBuilders.formLogin("/login")
@@ -63,7 +63,7 @@ class LoginMvcTests {
     }
 
     @Test
-    @DisplayName("Login com credenciais inválidas deve redirecionar para '/login?error'")
+    @DisplayName("Login with invalid credentials should redirect to '/login?error'")
     void loginIncorreto_DeveRedirecionarParaError() throws Exception {
         mockMvc.perform(
                         SecurityMockMvcRequestBuilders.formLogin("/login")
