@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +25,7 @@ public class TarefaApplication {
     }
 
     @Bean
+    @Profile("!test & !test2")
     public CommandLineRunner initAdmin(UsuarioRepository userRepo,
                                        PasswordEncoder passwordEncoder) {
         return args -> {

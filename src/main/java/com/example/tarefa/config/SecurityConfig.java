@@ -12,6 +12,7 @@ import com.example.tarefa.service.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
+@Profile("!test & !test2")
 @RequiredArgsConstructor
 public class SecurityConfig {
 
