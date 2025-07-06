@@ -1,4 +1,4 @@
-name: Deploy para Produção
+name: Deploy da Homologação para Produção
 
 on:
   workflow_dispatch:
@@ -8,13 +8,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: ⬇️ Baixar JAR da release homolog-latest
-      uses: dsaltares/fetch-gh-release-asset@v1
+    - name: ⬇️ Baixar tarefa-0.0.1-SNAPSHOT.jar da release homolog-latest
+      uses: robinraju/release-downloader@v1.9
       with:
-        repo: ${{ github.repository }}
-        version: tags/homolog-latest
-        file: tarefa-0.0.1-SNAPSHOT.jar
-        token: ${{ secrets.GH_PAT }}
+        tag: "homolog-latest"
+        fileName: "tarefa-0.0.1-SNAPSHOT.jar"
+        out-file-path: .
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: 🚚 Enviar JAR para a VM (Produção)
       uses: appleboy/scp-action@v0.1.6
