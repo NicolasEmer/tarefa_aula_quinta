@@ -8,6 +8,9 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    env:
+      MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+
     steps:
     - name: 🔄 Checkout do código
       uses: actions/checkout@v3
