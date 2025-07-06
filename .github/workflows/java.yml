@@ -39,3 +39,9 @@ jobs:
         script: |
           docker exec app-homolog pkill -f 'java -jar' || true
           docker exec -d app-homolog java -jar /app/tarefa-0.0.1-SNAPSHOT.jar
+
+    - name: 📦 Upload do JAR como artefato
+      uses: actions/upload-artifact@v4
+      with:
+        name: tarefa-jar
+        path: target/tarefa-0.0.1-SNAPSHOT.jar
