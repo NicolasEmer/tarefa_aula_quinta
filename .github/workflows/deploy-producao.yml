@@ -1,0 +1,33 @@
+name: Deploy para Produção
+
+on:
+  workflow_dispatch: 
+
+jobs:
+  deploy-prod:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 🔽 Baixar artefato do JAR gerado na Homologação
+      uses: actions/download-artifact@v4
+      with:
+        name: tarefa-jar
+
+    - name: 🚚 Enviar JAR para a VM (Produção)
+      uses: appleboy/scp-action@v0.1.6
+      with:
+        host: ${{ secrets.VM_HOST }}
+        username: ${{ secrets.VM_USER }}
+        key: ${{ secrets.VM_SSH_KEY }}
+        source: "tarefa-0.0.1-SNAPSHOT.jar"
+        target: "/home/${{ secrets.VM_USER }}/prod"
+
+    - name: 🐳 Reiniciar container app-prod com novo JAR
+      uses: appleboy/ssh-action@v0.1.8
+      with:
+        host: ${{ secrets.VM_HOST }}
+        username: ${{ secrets.VM_USER }}
+        key: ${{ secrets.VM_SSH_KEY }}
+        script: |
+          docker exec app-prod pkill -f 'java -jar' || true
+          docker exec -e MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} -d app-prod java -jar /app/tarefa-0.0.1-SNAPSHOT.jar
