@@ -51,3 +51,10 @@ jobs:
         files: target/tarefa-0.0.1-SNAPSHOT.jar
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 📦 Upload do JAR como artefato
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: tarefa-jar
+        path: target/tarefa-0.0.1-SNAPSHOT.jar
