@@ -2,7 +2,7 @@ name: Build e Deploy para Homologação
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
 jobs:
   build-and-deploy:
