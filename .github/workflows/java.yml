@@ -19,7 +19,9 @@ jobs:
         distribution: 'temurin'
 
     - name: 🛠️ Build com Maven (com senha injetada)
-      run: mvn clean package -Dspring.mail.password=${{ secrets.MAIL_PASSWORD }}
+      env:
+        MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+      run: mvn clean package "-Dspring.mail.password=$MAIL_PASSWORD"
 
     - name: 🚚 Enviar JAR para a VM (Homologação)
       uses: appleboy/scp-action@v0.1.6
