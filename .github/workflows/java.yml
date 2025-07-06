@@ -42,9 +42,11 @@ jobs:
           docker exec app-homolog pkill -f 'java -jar' || true
           docker exec -e MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} -d app-homolog java -jar /app/tarefa-0.0.1-SNAPSHOT.jar
 
-    - name: 📦 Upload do JAR como artefato
-      if: always()
-      uses: actions/upload-artifact@v4
+    - name: 🏷️ Publicar JAR como Release temporário
+      uses: softprops/action-gh-release@v1
       with:
-        name: tarefa-jar
-        path: target/tarefa-0.0.1-SNAPSHOT.jar
+        tag_name: homolog-latest
+        name: Versão Homologação
+        files: target/tarefa-0.0.1-SNAPSHOT.jar
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
