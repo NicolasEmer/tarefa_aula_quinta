@@ -43,6 +43,7 @@ jobs:
           docker exec -e MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} -d app-homolog java -jar /app/tarefa-0.0.1-SNAPSHOT.jar
 
     - name: 🏷️ Publicar JAR como Release temporário
+      if: always()
       uses: softprops/action-gh-release@v1
       with:
         tag_name: homolog-latest
