@@ -64,7 +64,7 @@ class TarefaApplicationTests {
     }
 
     @Test
-    @DisplayName("Should create tarefa with valid data and return tarefa with status 201")
+    @DisplayName("Should create tarefa with valid data and return tarefa with the status 201")
     public void createTarefa_WithDescricaoDataPrevistaAndSituacaoValid_ReturnTarefaCreatedWithStatus201() {
 
         TarefaRequestDto dto = new TarefaRequestDto(
