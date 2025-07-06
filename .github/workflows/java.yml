@@ -8,9 +8,6 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
-    env:
-      MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-
     steps:
     - name: 🔄 Checkout do código
       uses: actions/checkout@v3
@@ -21,8 +18,8 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: 🛠️ Build com Maven
-      run: mvn clean package
+    - name: 🛠️ Build com Maven (com senha injetada)
+      run: mvn clean package -Dspring.mail.password=${{ secrets.MAIL_PASSWORD }}
 
     - name: 🚚 Enviar JAR para a VM (Homologação)
       uses: appleboy/scp-action@v0.1.6
