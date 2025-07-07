@@ -16,3 +16,8 @@ sudo docker ps -a
 #Restart do container
 
 sudo docker restart univates-app-homolog-1
+
+
+#Mostrar tabela alterada
+
+DESCRIBE nome_da_tabela;
