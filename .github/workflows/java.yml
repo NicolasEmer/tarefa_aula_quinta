@@ -21,7 +21,8 @@ jobs:
     - name: 🛠️ Build com Maven
       env:
         MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-      run: mvn clean package "-Dspring.mail.password=$MAIL_PASSWORD"
+      run: mvn -Dspring.mail.password="$MAIL_PASSWORD" clean package
+
 
     - name: 🚚 Enviar JAR para a VM (Homologação)
       uses: appleboy/scp-action@v0.1.6
