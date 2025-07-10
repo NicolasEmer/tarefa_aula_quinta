@@ -13,6 +13,10 @@ scp .\tarefa-0.0.1-SNAPSHOT.jar univates@177.44.248.76:/home/univates/homolog/
 sudo docker ps -a
 
 
+#Acessar container
+docker exec -it univates-app-homolog-1 bash
+
+
 #Restart do container
 
 sudo docker restart univates-app-homolog-1
