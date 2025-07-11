@@ -22,8 +22,9 @@ jobs:
       env:
         MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
       run: |
-        sed -i "s|__MAIL_PASSWORD__|$MAIL_PASSWORD|g" src/main/resources/application.properties
-
+        for file in application.properties application-homolog.properties application-prod.properties; do
+          sed -i "s|__MAIL_PASSWORD__|$MAIL_PASSWORD|g" src/main/resources/$file
+        done
 
     - name: 🛠️ Build com Maven
       run: mvn clean package
