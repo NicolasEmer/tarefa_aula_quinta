@@ -18,10 +18,15 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: 🛠️ Build com Maven
+    - name: 🔐 Substituir senha no application.properties com espaços
       env:
         MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-      run: mvn -Dspring.mail.password="$MAIL_PASSWORD" clean package
+      run: |
+        sed -i "s|__MAIL_PASSWORD__|$MAIL_PASSWORD|g" src/main/resources/application.properties
+
+
+    - name: 🛠️ Build com Maven
+      run: mvn clean package
 
 
     - name: 🚚 Enviar JAR para a VM (Homologação)
